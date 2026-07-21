@@ -1,6 +1,51 @@
 import { motion } from "framer-motion";
+import { useMemo } from "react";
 import Counter from "./Counter";
 import { container, item } from "../utils/motion";
+
+function FloatingParticles() {
+  const particles = useMemo(() => {
+    return Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 4 + 2,
+      duration: Math.random() * 10 + 15,
+      delay: Math.random() * 5,
+      color: i % 4 === 0 ? '#D4C8E2' : i % 4 === 1 ? '#E8D5B7' : i % 4 === 2 ? '#F9E4E4' : '#A8B5A0'
+    }));
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {particles.map((particle) => (
+        <motion.div
+          key={particle.id}
+          className="absolute rounded-full"
+          style={{
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+            width: `${particle.size}px`,
+            height: `${particle.size}px`,
+            backgroundColor: particle.color,
+            opacity: 0.3
+          }}
+          animate={{
+            y: [0, -30, 0],
+            x: [0, Math.sin(particle.id) * 20, 0],
+            opacity: [0.3, 0.6, 0.3]
+          }}
+          transition={{
+            duration: particle.duration,
+            delay: particle.delay,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+      ))}
+    </div>
+  );
+}
 
 const navItems = [
   {
@@ -48,6 +93,8 @@ function HomeScreen({ onNavigate }) {
         }}
       />
 
+      <FloatingParticles />
+
       <div className="w-full max-w-md flex flex-col items-center gap-8 relative z-10">
         {/* Logo + Title */}
         <motion.div
@@ -68,12 +115,26 @@ function HomeScreen({ onNavigate }) {
 
         {/* Live counter */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.25, duration: 0.5 }}
-          className="bg-white/40 backdrop-blur-sm rounded-2xl px-6 py-4 border border-lilac-light/30"
+          className="relative p-6 rounded-3xl overflow-hidden"
+          style={{
+            background: "linear-gradient(135deg, rgba(253,246,236,0.9), rgba(248,240,245,0.9))",
+            boxShadow: "0 8px 32px rgba(124,92,191,0.15), inset 0 1px 0 rgba(255,255,255,0.6)"
+          }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
         >
-          <Counter />
+          <div className="absolute inset-0 rounded-3xl p-[2px]"
+            style={{
+              background: "linear-gradient(135deg, #D4C8E2, #E8D5B7, #F9E4E4, #A8B5A0)",
+              WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+              WebkitMaskComposite: "xor",
+              maskComposite: "exclude"
+            }}
+          />
+          <div className="relative z-10">
+            <Counter />
+          </div>
         </motion.div>
 
         {/* Navigation grid */}
@@ -88,7 +149,7 @@ function HomeScreen({ onNavigate }) {
               key={navItem.id}
               onClick={() => onNavigate(navItem.id)}
               variants={item}
-              className="group flex flex-col items-center gap-2.5 p-5 sm:p-6 bg-white/50 backdrop-blur-sm rounded-2xl border border-lilac-light/40 hover:bg-white/70 hover:border-lilac/60 hover:shadow-lg hover:shadow-lilac/10 hover:-translate-y-0.5 transition-all duration-300 ease-out cursor-pointer"
+              className="group flex flex-col items-center gap-2.5 p-5 sm:p-6 bg-white/60 backdrop-blur-xl rounded-2xl border border-white/40 shadow-[0_4px_24px_rgba(124,92,191,0.15)] hover:shadow-[0_8px_32px_rgba(124,92,191,0.25)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ease-out cursor-pointer"
               whileTap={{ scale: 0.97 }}
             >
               <span

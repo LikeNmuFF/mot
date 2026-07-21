@@ -60,7 +60,7 @@ function Gallery({ onBack }) {
         </div>
       </div>
 
-      {/* Gallery Grid */}
+      {/* Gallery Grid - Masonry Layout */}
       <div className="max-w-4xl mx-auto px-4 py-6">
         {gallery.length === 0 ? (
           <motion.div
@@ -82,12 +82,11 @@ function Gallery({ onBack }) {
             </p>
           </motion.div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="columns-2 sm:columns-3 gap-3 sm:gap-4 space-y-3 sm:space-y-4">
             {gallery.map((photo, index) => (
-              <motion.button
+              <motion.div
                 key={photo.id}
-                onClick={() => openLightbox(index)}
-                className="aspect-square rounded-xl overflow-hidden shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ease-out cursor-pointer group"
+                className="break-inside-avoid rounded-2xl overflow-hidden cursor-pointer group"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -97,14 +96,21 @@ function Gallery({ onBack }) {
                 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                onClick={() => openLightbox(index)}
               >
-                <img
-                  src={photo.src}
-                  alt={photo.caption}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
-              </motion.button>
+                <div className="relative overflow-hidden">
+                  <img
+                    src={photo.src}
+                    alt={photo.caption}
+                    className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-purple/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute bottom-0 left-0 right-0 p-3 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                    <p className="text-white text-sm font-sans">{photo.caption}</p>
+                  </div>
+                </div>
+              </motion.div>
             ))}
           </div>
         )}
@@ -216,10 +222,10 @@ function Gallery({ onBack }) {
                     src={selectedPhoto.src}
                     alt={selectedPhoto.caption}
                     className="w-full rounded-lg object-contain max-h-[70vh]"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: duration.fast, ease: ease.smooth }}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
                   />
                 </AnimatePresence>
 
