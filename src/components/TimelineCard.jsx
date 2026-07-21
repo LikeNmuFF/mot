@@ -16,12 +16,14 @@ function TimelineCard({ date, title, caption, image, index }) {
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: duration.entrance, ease: ease.smooth }}
     >
-      <div className="w-full max-w-sm">
-        <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-4 sm:p-5 border border-lilac-light/30 mb-4">
+      <div className="w-full max-w-sm relative">
+        {/* Timeline marker */}
+        <div className="absolute left-6 sm:left-1/2 w-3 h-3 bg-purple rounded-full border-2 border-cream -translate-x-1/2 top-6 z-10" />
+        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-lilac-light/30 mb-4 shadow-sm hover:shadow-md transition-shadow duration-300">
           <img
             src={image}
             alt={title}
-            className="w-full h-48 sm:h-56 object-cover rounded-xl mb-4 group-hover:scale-[1.02] transition-transform duration-300"
+            className="w-full h-52 sm:h-60 object-cover rounded-xl mb-4 group-hover:scale-[1.02] transition-transform duration-500"
             loading="lazy"
           />
           <p className="font-sans text-xs text-gold uppercase tracking-widest mb-1">
