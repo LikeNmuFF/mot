@@ -203,13 +203,26 @@ function Photobooth({ onBack }) {
 
       {/* Video feed */}
       <div className="relative w-full h-screen flex items-center justify-center bg-black">
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          muted
-          className="w-full h-full object-cover md:max-w-2xl lg:max-w-3xl md:rounded-2xl"
-        />
+        <div className="relative w-full aspect-[3/4] max-w-sm mx-auto rounded-3xl overflow-hidden border-4 border-white/30 shadow-[0_8px_32px_rgba(124,92,191,0.2)]">
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-purple/10 to-transparent pointer-events-none z-10" />
+          
+          {/* Ring animation on capture */}
+          {isCapturing && (
+            <motion.div
+              className="absolute inset-0 rounded-3xl border-4 border-white pointer-events-none z-20"
+              initial={{ scale: 1, opacity: 1 }}
+              animate={{ scale: 1.1, opacity: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            />
+          )}
+        </div>
 
         {/* Countdown overlay */}
         <AnimatePresence>
@@ -250,25 +263,44 @@ function Photobooth({ onBack }) {
       {/* Capture button */}
       <div className="absolute bottom-8 left-0 right-0 flex justify-center z-20">
         <motion.button
+          className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={startCaptureSequence}
           disabled={isCapturing || !cameraReady}
-          className={`w-20 h-20 rounded-full border-4 flex items-center justify-center transition-all duration-200 ease-out ${
-            isCapturing || !cameraReady
-              ? "border-white/30 bg-white/10 cursor-not-allowed"
-              : "border-white bg-white/20 hover:bg-white/30 active:scale-95"
-          }`}
-          whileTap={!isCapturing && cameraReady ? { scale: 0.9 } : {}}
         >
-          <div
-            className={`w-16 h-16 rounded-full transition-colors duration-200 ${
-              isCapturing ? "bg-purple" : "bg-white"
-            }`}
-          />
+          <div className="w-12 h-12 rounded-full border-4 border-purple flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-purple/20" />
+          </div>
         </motion.button>
       </div>
 
+      {/* Photo strip preview */}
+      <AnimatePresence>
+        {capturedPhotos.length > 0 && !showStrip && (
+          <motion.div
+            className="absolute bottom-28 left-0 right-0 flex gap-3 justify-center z-10"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+          >
+            {capturedPhotos.map((photo, index) => (
+              <motion.div
+                key={index}
+                className="w-16 h-20 rounded-lg overflow-hidden border-2 border-white shadow-md"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <img src={photo} alt={`Photo ${index + 1}`} className="w-full h-full object-cover" />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Ready indicator */}
-      {cameraReady && !isCapturing && (
+      {cameraReady && !isCapturing && capturedPhotos.length === 0 && (
         <motion.p
           className="absolute bottom-24 left-0 right-0 text-center text-white/60 font-sans text-sm z-10"
           initial={{ opacity: 0, y: 10 }}
