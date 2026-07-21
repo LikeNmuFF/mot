@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ease, duration } from "../utils/motion";
 
 const loveResponses = [
   { max: 20, text: "Hmm, okay..." },
@@ -35,7 +36,7 @@ function ConfettiParticle({ index }) {
       transition={{
         duration: 1.5,
         delay: randomDelay,
-        ease: "easeOut",
+        ease: ease.smooth,
       }}
       style={{
         width: isCircle ? 10 : 6,
@@ -140,9 +141,10 @@ function InteractiveMoment({ onComplete }) {
                 [&::-webkit-slider-thumb]:border-4
                 [&::-webkit-slider-thumb]:border-white
                 [&::-webkit-slider-thumb]:shadow-[0_0_12px_rgba(124,92,191,0.5)]
-                [&::-webkit-slider-thumb]:transition-shadow
+                [&::-webkit-slider-thumb]:transition-all
                 [&::-webkit-slider-thumb]:duration-200
                 [&::-webkit-slider-thumb]:hover:shadow-[0_0_20px_rgba(124,92,191,0.7)]
+                [&::-webkit-slider-thumb]:active:scale-110
                 [&::-moz-range-thumb]:appearance-none
                 [&::-moz-range-thumb]:w-8
                 [&::-moz-range-thumb]:h-8
@@ -164,7 +166,7 @@ function InteractiveMoment({ onComplete }) {
             key={value}
             initial={{ scale: 0.9, opacity: 0.7 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: duration.fast, ease: ease.smooth }}
           >
             {value}
           </motion.span>
