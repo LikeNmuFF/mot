@@ -15,11 +15,11 @@ function ConfettiParticle({ index }) {
   const colors = ["#B8A9C9", "#7C5CBF", "#D4C8E2", "#FDF6EC", "#A8B5A0"];
   const color = colors[index % colors.length];
 
-  const randomX = useMemo(() => (Math.random() - 0.5) * 300, []);
-  const randomY = useMemo(() => -(Math.random() * 250 + 100), []);
-  const randomRotate = useMemo(() => Math.random() * 720 - 360, []);
-  const randomScale = useMemo(() => Math.random() * 0.5 + 0.5, []);
-  const randomDelay = useMemo(() => Math.random() * 0.3, []);
+  const randomX = useMemo(() => (Math.random() - 0.5) * 250, []);
+  const randomY = useMemo(() => -(Math.random() * 200 + 80), []);
+  const randomRotate = useMemo(() => Math.random() * 540 - 270, []);
+  const randomScale = useMemo(() => Math.random() * 0.4 + 0.4, []);
+  const randomDelay = useMemo(() => Math.random() * 0.2, []);
   const isCircle = useMemo(() => index % 3 === 0, [index]);
 
   return (
@@ -34,13 +34,13 @@ function ConfettiParticle({ index }) {
         rotate: randomRotate,
       }}
       transition={{
-        duration: 1.5,
+        duration: 2,
         delay: randomDelay,
-        ease: ease.smooth,
+        ease: "easeOut",
       }}
       style={{
-        width: isCircle ? 10 : 6,
-        height: isCircle ? 10 : 14,
+        width: isCircle ? 8 : 5,
+        height: isCircle ? 8 : 12,
         borderRadius: isCircle ? "50%" : "2px",
         backgroundColor: color,
       }}
@@ -103,7 +103,7 @@ function InteractiveMoment({ onComplete }) {
 
             {/* Filled track */}
             <motion.div
-              className="absolute h-3 rounded-full"
+              className="absolute h-3 rounded-full shadow-[0_0_12px_rgba(124,92,191,0.4)]"
               style={{
                 background: "linear-gradient(90deg, #D4C8E2, #B8A9C9, #7C5CBF)",
                 width: fillWidth,
@@ -134,25 +134,25 @@ function InteractiveMoment({ onComplete }) {
               onChange={(e) => setValue(Number(e.target.value))}
               className="absolute w-full h-12 appearance-none bg-transparent cursor-pointer z-10
                 [&::-webkit-slider-thumb]:appearance-none
-                [&::-webkit-slider-thumb]:w-8
-                [&::-webkit-slider-thumb]:h-8
+                [&::-webkit-slider-thumb]:w-10
+                [&::-webkit-slider-thumb]:h-10
                 [&::-webkit-slider-thumb]:rounded-full
                 [&::-webkit-slider-thumb]:bg-purple
                 [&::-webkit-slider-thumb]:border-4
                 [&::-webkit-slider-thumb]:border-white
-                [&::-webkit-slider-thumb]:shadow-[0_0_12px_rgba(124,92,191,0.5)]
+                [&::-webkit-slider-thumb]:shadow-[0_0_16px_rgba(124,92,191,0.6)]
                 [&::-webkit-slider-thumb]:transition-all
                 [&::-webkit-slider-thumb]:duration-200
-                [&::-webkit-slider-thumb]:hover:shadow-[0_0_20px_rgba(124,92,191,0.7)]
+                [&::-webkit-slider-thumb]:hover:shadow-[0_0_24px_rgba(124,92,191,0.8)]
                 [&::-webkit-slider-thumb]:active:scale-110
                 [&::-moz-range-thumb]:appearance-none
-                [&::-moz-range-thumb]:w-8
-                [&::-moz-range-thumb]:h-8
+                [&::-moz-range-thumb]:w-10
+                [&::-moz-range-thumb]:h-10
                 [&::-moz-range-thumb]:rounded-full
                 [&::-moz-range-thumb]:bg-purple
                 [&::-moz-range-thumb]:border-4
                 [&::-moz-range-thumb]:border-white
-                [&::-moz-range-thumb]:shadow-[0_0_12px_rgba(124,92,191,0.5)]
+                [&::-moz-range-thumb]:shadow-[0_0_16px_rgba(124,92,191,0.6)]
                 [&::-moz-range-track]:appearance-none
                 [&::-moz-range-track]:bg-transparent
                 [&::-moz-range-track]:h-3"
