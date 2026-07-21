@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PhotoStripTemplate from "./PhotoStripTemplate";
+import { ease, duration } from "../utils/motion";
 
 const CAPTURE_DELAY = 3;
 const TOTAL_PHOTOS = 3;
@@ -218,7 +219,7 @@ function Photobooth({ onBack }) {
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 1.5 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: duration.fast, ease: ease.smooth }}
             >
               <span className="font-serif text-[120px] sm:text-[160px] text-white drop-shadow-2xl font-bold">
                 {countdown}
@@ -251,7 +252,7 @@ function Photobooth({ onBack }) {
         <motion.button
           onClick={startCaptureSequence}
           disabled={isCapturing || !cameraReady}
-          className={`w-20 h-20 rounded-full border-4 flex items-center justify-center transition-all ${
+          className={`w-20 h-20 rounded-full border-4 flex items-center justify-center transition-all duration-200 ease-out ${
             isCapturing || !cameraReady
               ? "border-white/30 bg-white/10 cursor-not-allowed"
               : "border-white bg-white/20 hover:bg-white/30 active:scale-95"
@@ -259,7 +260,7 @@ function Photobooth({ onBack }) {
           whileTap={!isCapturing && cameraReady ? { scale: 0.9 } : {}}
         >
           <div
-            className={`w-16 h-16 rounded-full transition-colors ${
+            className={`w-16 h-16 rounded-full transition-colors duration-200 ${
               isCapturing ? "bg-purple" : "bg-white"
             }`}
           />
