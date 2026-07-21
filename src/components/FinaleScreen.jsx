@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { content } from "../data/content";
+import { ease, duration } from "../utils/motion";
 
 function TulipPetal({ index, delay }) {
   const colors = ["#B8A9C9", "#D4C8E2", "#7C5CBF", "#FDF6EC"];
@@ -22,7 +23,11 @@ function TulipPetal({ index, delay }) {
       }}
       initial={{ opacity: 0, scale: 0, rotate: angle - 90 }}
       animate={{ opacity: 0.7, scale: 1, rotate: angle - 90 }}
-      transition={{ duration: 0.6, delay: delay + index * 0.05 }}
+      transition={{ 
+        duration: 0.6, 
+        delay: delay + index * 0.05,
+        ease: ease.smooth 
+      }}
     />
   );
 }
@@ -52,7 +57,11 @@ function CelebrationParticle({ index }) {
         opacity: [1, 1, 0],
         scale: [0, 1.2, 0.6],
       }}
-      transition={{ duration: 1.2, delay: 1.2 + index * 0.03, ease: "easeOut" }}
+      transition={{ 
+        duration: 1.2, 
+        delay: 1.2 + index * 0.03, 
+        ease: ease.smooth 
+      }}
     />
   );
 }
@@ -131,7 +140,7 @@ function FinaleScreen({ onComplete }) {
             className="w-full max-w-lg flex flex-col items-center gap-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: duration.entrance, ease: ease.smooth }}
           >
             {/* Decorative top line */}
             <motion.div
@@ -160,7 +169,11 @@ function FinaleScreen({ onComplete }) {
                     className="font-serif text-base sm:text-lg text-charcoal leading-relaxed text-center"
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.7 + i * 0.3, duration: 0.6 }}
+                    transition={{ 
+                      delay: 0.7 + i * 0.3, 
+                      duration: duration.slow,
+                      ease: ease.smooth 
+                    }}
                   >
                     {para}
                   </motion.p>
