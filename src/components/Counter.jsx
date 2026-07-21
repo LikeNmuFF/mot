@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { ease, duration } from "../utils/motion";
 import { content } from "../data/content";
 
 function Counter({ compact = false }) {
@@ -30,9 +32,14 @@ function Counter({ compact = false }) {
 
   if (compact) {
     return (
-      <span className="font-serif text-gold animate-heartbeat inline-block">
+      <motion.span
+        className="font-serif text-gold inline-block"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: duration.normal, ease: ease.smooth }}
+      >
         {elapsed.months}mo {elapsed.days}d
-      </span>
+      </motion.span>
     );
   }
 
@@ -46,11 +53,27 @@ function Counter({ compact = false }) {
 }
 
 function TimeUnit({ value, label }) {
+  const digits = String(value).split('');
+  
   return (
     <div className="flex flex-col items-center">
-      <span className="font-serif text-3xl sm:text-4xl text-gold animate-heartbeat leading-none">
-        {value}
-      </span>
+      <div className="flex overflow-hidden">
+        {digits.map((digit, index) => (
+          <motion.span
+            key={`${label}-${index}`}
+            className="font-serif text-3xl sm:text-4xl text-gold leading-none"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ 
+              delay: index * 0.05, 
+              duration: duration.fast,
+              ease: ease.smooth 
+            }}
+          >
+            {digit}
+          </motion.span>
+        ))}
+      </div>
       <span className="text-xs sm:text-sm text-warm-gray mt-1 font-sans tracking-wide uppercase">
         {label}
       </span>
