@@ -23,22 +23,6 @@
   --font-sans: 'Inter', system-ui, sans-serif;
 }
 
-/* Typography scale */
-@theme {
-  --text-display: 3rem;
-  --text-display-lg: 4rem;
-  --text-heading: 1.75rem;
-  --text-heading-lg: 2.25rem;
-  --text-body: 1rem;
-  --text-body-lg: 1.125rem;
-  --text-label: 0.8125rem;
-  --text-caption: 0.75rem;
-  
-  --spacing-section: 4rem;
-  --spacing-card: 1.5rem;
-  --spacing-card-lg: 2rem;
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -69,11 +53,6 @@ body {
 
 .animate-heartbeat {
   animation: heartbeat 1.5s ease-in-out infinite;
-}
-
-/* Shimmer effect for button */
-@keyframes shimmer {
-  100% { transform: translateX(100%); }
 }
 
 /* Shake animation for wrong login */
@@ -118,20 +97,5 @@ input:focus-visible {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-}
-
-/* Spacing utilities */
-@layer utilities {
-  .px-responsive {
-    @apply px-6 sm:px-12 lg:px-16;
-  }
-  
-  .section-gap {
-    @apply gap-16 sm:gap-20;
-  }
-  
-  .card-padding {
-    @apply p-5 sm:p-6;
   }
 }
