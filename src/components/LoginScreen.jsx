@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { content } from "../data/content";
+import { ease, duration, fadeUp, fadeIn } from "../utils/motion";
 
 function LoginScreen({ onUnlock }) {
   const [month, setMonth] = useState("");
@@ -8,6 +9,7 @@ function LoginScreen({ onUnlock }) {
   const [year, setYear] = useState("");
   const [shaking, setShaking] = useState(false);
   const [unlocking, setUnlocking] = useState(false);
+  const [error, setError] = useState(false);
   const monthRef = useRef(null);
   const dayRef = useRef(null);
   const yearRef = useRef(null);
@@ -20,13 +22,14 @@ function LoginScreen({ onUnlock }) {
     }
   }, [onUnlock]);
 
-  const [unlockMonth, unlockDay, unlockYear] = content.unlockDate
+  const [unlockYear, unlockMonth, unlockDay] = content.unlockDate
     .split("-")
     .map(Number);
 
   const handleInput = (value, setter, nextRef, maxLength) => {
     const cleaned = value.replace(/\D/g, "").slice(0, maxLength);
     setter(cleaned);
+    setError(false);
     if (cleaned.length === maxLength && nextRef?.current) {
       nextRef.current.focus();
     }
@@ -45,47 +48,85 @@ function LoginScreen({ onUnlock }) {
 
     if (m === unlockMonth && d === unlockDay && y === unlockYear) {
       setUnlocking(true);
-      setTimeout(() => onUnlock(), 800);
+      setTimeout(() => onUnlock(), 800); // Faster unlock
     } else {
       setShaking(true);
+      setError(true);
       setTimeout(() => {
         setShaking(false);
         setMonth("");
         setDay("");
         setYear("");
+        setError(false);
         monthRef.current?.focus();
-      }, 500);
+      }, 600);
     }
   };
 
-  const inputClass =
-    "w-20 sm:w-24 h-16 sm:h-20 text-center text-2xl sm:text-3xl font-serif bg-white/60 border-2 border-lilac-light rounded-xl focus:border-purple focus:outline-none transition-colors placeholder:text-warm-gray/50 placeholder:text-xl";
+  const inputClass = `w-[5rem] sm:w-28 h-16 sm:h-[4.5rem] text-center text-xl sm:text-2xl font-serif
+    bg-white/60 backdrop-blur-md border-[1.5px] rounded-2xl
+    focus:border-purple focus:bg-white/80 focus:ring-2 focus:ring-purple/15
+    focus:outline-none transition-all duration-300 ease-out
+    placeholder:text-lilac/60 placeholder:text-lg
+    ${error ? "border-rose animate-shake" : "border-lilac-light/60"}`;
 
   return (
     <motion.div
-      className="min-h-screen bg-cream flex flex-col items-center justify-center px-6"
+      className="min-h-screen bg-gradient-to-b from-cream via-cream to-lilac-light/20 flex flex-col items-center justify-center px-6 relative overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.4 }}
     >
+      {/* Subtle background tulip watermark */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
+        <img src="/logo.png" alt="" className="w-[500px] h-[500px] object-contain" />
+      </div>
+
       <AnimatePresence mode="wait">
         {!unlocking ? (
           <motion.div
             key="form"
-            className={`flex flex-col items-center gap-8 ${
+            className={`flex flex-col items-center gap-6 sm:gap-8 relative z-10 ${
               shaking ? "animate-shake" : ""
             }`}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
           >
-            <p className="font-serif text-xl sm:text-2xl text-charcoal text-center leading-relaxed">
-              When did it all start?
-            </p>
+            {/* Logo */}
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              className="mb-2"
+            >
+              <div className="absolute w-40 h-40 bg-lilac/20 rounded-full blur-3xl pointer-events-none" />
+              <img
+                src="/logo.png"
+                alt="Xeia"
+                className="w-28 h-28 sm:w-36 sm:h-36 object-contain drop-shadow-md"
+              />
+            </motion.div>
 
-            <div className="flex gap-3 sm:gap-4">
+            {/* Prompt */}
+            <motion.p
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              className="font-serif text-lg sm:text-xl text-charcoal/80 text-center leading-relaxed max-w-[280px]"
+            >
+              When did it all start?
+            </motion.p>
+
+            {/* Date inputs */}
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              className="flex gap-2.5 sm:gap-3 items-center"
+            >
               <input
                 ref={monthRef}
                 type="text"
@@ -97,9 +138,7 @@ function LoginScreen({ onUnlock }) {
                 className={inputClass}
                 autoFocus
               />
-              <span className="self-center text-2xl text-warm-gray font-light">
-                /
-              </span>
+              <span className="text-lilac/40 text-xl font-light select-none">/</span>
               <input
                 ref={dayRef}
                 type="text"
@@ -110,9 +149,7 @@ function LoginScreen({ onUnlock }) {
                 onKeyDown={(e) => handleKeyDown(e, monthRef)}
                 className={inputClass}
               />
-              <span className="self-center text-2xl text-warm-gray font-light">
-                /
-              </span>
+              <span className="text-lilac/40 text-xl font-light select-none">/</span>
               <input
                 ref={yearRef}
                 type="text"
@@ -126,30 +163,65 @@ function LoginScreen({ onUnlock }) {
                   handleKeyDown(e, dayRef);
                   if (e.key === "Enter") handleSubmit();
                 }}
-                className={`${inputClass} w-28 sm:w-32`}
+                className={`${inputClass} w-[5.5rem] sm:w-28`}
               />
-            </div>
+            </motion.div>
 
+            {/* Error hint */}
+            <motion.div
+              className="h-5 flex items-center"
+              initial={false}
+              animate={{ opacity: error ? 1 : 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <p className="font-sans text-xs text-rose tracking-wide">
+                Try again
+              </p>
+            </motion.div>
+
+            {/* Submit button */}
             <motion.button
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
               onClick={handleSubmit}
-              className="mt-4 px-10 py-3 bg-purple text-white font-sans font-medium text-sm tracking-wide rounded-full hover:bg-purple-dark transition-colors"
+              className="mt-1 px-12 py-3.5 bg-purple text-white font-sans font-medium text-sm tracking-wider rounded-full hover:bg-purple-dark active:bg-purple-dark transition-colors duration-200 shadow-sm shadow-purple/20 hover:shadow-md hover:shadow-purple/25 relative overflow-hidden"
               whileTap={{ scale: 0.96 }}
             >
-              Unlock
+              <span className="relative z-10">Unlock</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
             </motion.button>
           </motion.div>
         ) : (
           <motion.div
             key="unlocking"
-            className="flex flex-col items-center gap-4"
-            initial={{ opacity: 0, scale: 0.8 }}
+            className="flex flex-col items-center gap-5"
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <div className="w-12 h-12 rounded-full border-4 border-lilac-light border-t-purple animate-spin" />
-            <p className="font-serif text-lg text-warm-gray italic">
+            <motion.img
+              src="/logo.png"
+              alt="Xeia"
+              className="w-20 h-20 object-contain"
+              initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            />
+            <motion.div
+              className="w-10 h-10 rounded-full border-[2.5px] border-lilac-light border-t-purple animate-spin"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            />
+            <motion.p
+              className="font-serif text-base text-warm-gray italic"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
               Opening our story...
-            </p>
+            </motion.p>
           </motion.div>
         )}
       </AnimatePresence>
