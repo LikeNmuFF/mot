@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Heart } from "lucide-react";
 import { content } from "../data/content";
 import { ease, duration } from "../utils/motion";
 
@@ -66,6 +67,53 @@ function CelebrationParticle({ index }) {
   );
 }
 
+function TulipPetals() {
+  const petals = useMemo(() => {
+    return Array.from({ length: 12 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      delay: Math.random() * 8,
+      duration: 10 + Math.random() * 8,
+      size: 8 + Math.random() * 12,
+      rotation: Math.random() * 360,
+      color: i % 3 === 0 ? "#FDF6EC" : i % 3 === 1 ? "#F9E4E4" : "#E8D5B7",
+    }));
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden z-5">
+      {petals.map((petal) => (
+        <motion.div
+          key={petal.id}
+          className="absolute"
+          style={{
+            left: `${petal.x}%`,
+            top: "-20px",
+            width: `${petal.size}px`,
+            height: `${petal.size * 1.3}px`,
+            borderRadius: "50% 50% 50% 0%",
+            backgroundColor: petal.color,
+            transform: `rotate(${petal.rotation}deg)`,
+            opacity: 0.7,
+          }}
+          animate={{
+            y: ["0vh", "110vh"],
+            x: [0, Math.sin(petal.id) * 30],
+            rotate: [petal.rotation, petal.rotation + 360],
+            opacity: [0.7, 0.7, 0],
+          }}
+          transition={{
+            duration: petal.duration,
+            delay: petal.delay,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 function FinaleScreen({ onComplete }) {
   const [phase, setPhase] = useState("tulip"); // "tulip" → "message"
 
@@ -90,6 +138,18 @@ function FinaleScreen({ onComplete }) {
           <CelebrationParticle key={i} index={i} />
         ))}
       </div>
+
+      {/* Falling tulip petals */}
+      <TulipPetals />
+
+      {/* Vignette overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none z-10"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, transparent 50%, rgba(253,246,236,0.6) 100%)",
+        }}
+      />
 
       <AnimatePresence mode="wait">
         {phase === "tulip" ? (
@@ -207,15 +267,29 @@ function FinaleScreen({ onComplete }) {
               transition={{ delay: 2, duration: 0.6 }}
             />
 
-            {/* Signature */}
-            <motion.p
-              className="font-serif text-base italic text-purple"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 2.2, duration: 0.5 }}
+            {/* Signature with glow */}
+            <motion.div
+              className="mt-12 text-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.5, duration: 1 }}
             >
-              With all my love 💜
-            </motion.p>
+              <p
+                className="font-display text-xl sm:text-2xl text-purple/80 italic"
+                style={{
+                  textShadow: "0 0 20px rgba(124,92,191,0.3)",
+                }}
+              >
+                "Every love story is beautiful, but ours is my favorite."
+              </p>
+              <div className="mt-6 flex items-center justify-center gap-3 text-rose/60">
+                <Heart className="w-4 h-4 fill-current" />
+                <span className="font-body text-sm tracking-widest uppercase">
+                  With love, always
+                </span>
+                <Heart className="w-4 h-4 fill-current" />
+              </div>
+            </motion.div>
 
             {/* Continue button */}
             <motion.button
