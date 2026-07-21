@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { gallery } from "../data/gallery";
+import { ease, duration, stagger } from "../utils/motion";
 
 function Gallery({ onBack }) {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
@@ -86,13 +87,13 @@ function Gallery({ onBack }) {
               <motion.button
                 key={photo.id}
                 onClick={() => openLightbox(index)}
-                className="aspect-square rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer group"
+                className="aspect-square rounded-xl overflow-hidden shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ease-out cursor-pointer group"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
-                  duration: 0.3,
-                  delay: index * 0.05,
-                  ease: "easeOut",
+                  duration: duration.entrance,
+                  delay: index * stagger.fast,
+                  ease: ease.smooth,
                 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -218,7 +219,7 @@ function Gallery({ onBack }) {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: duration.fast, ease: ease.smooth }}
                   />
                 </AnimatePresence>
 
