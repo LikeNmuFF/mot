@@ -71,6 +71,11 @@ body {
   animation: heartbeat 1.5s ease-in-out infinite;
 }
 
+/* Shimmer effect for button */
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
 /* Shake animation for wrong login */
 @keyframes shake {
   0%, 100% { transform: translateX(0); }

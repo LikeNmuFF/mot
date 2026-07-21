@@ -63,9 +63,9 @@ function LoginScreen({ onUnlock }) {
     }
   };
 
-  const inputClass = `w-[4.5rem] sm:w-24 h-14 sm:h-16 text-center text-xl sm:text-2xl font-serif
-    bg-white/50 backdrop-blur-sm border-[1.5px] rounded-2xl
-    focus:border-purple focus:bg-white/70 focus:ring-2 focus:ring-purple/10
+  const inputClass = `w-[5rem] sm:w-28 h-16 sm:h-[4.5rem] text-center text-xl sm:text-2xl font-serif
+    bg-white/60 backdrop-blur-md border-[1.5px] rounded-2xl
+    focus:border-purple focus:bg-white/80 focus:ring-2 focus:ring-purple/15
     focus:outline-none transition-all duration-300 ease-out
     placeholder:text-lilac/60 placeholder:text-lg
     ${error ? "border-rose animate-shake" : "border-lilac-light/60"}`;
@@ -102,10 +102,11 @@ function LoginScreen({ onUnlock }) {
               animate="visible"
               className="mb-2"
             >
+              <div className="absolute w-40 h-40 bg-lilac/20 rounded-full blur-3xl pointer-events-none" />
               <img
                 src="/logo.png"
                 alt="Xeia"
-                className="w-24 h-24 sm:w-28 sm:h-28 object-contain drop-shadow-sm"
+                className="w-28 h-28 sm:w-36 sm:h-36 object-contain drop-shadow-md"
               />
             </motion.div>
 
@@ -184,10 +185,11 @@ function LoginScreen({ onUnlock }) {
               initial="hidden"
               animate="visible"
               onClick={handleSubmit}
-              className="mt-1 px-10 py-3 bg-purple text-white font-sans font-medium text-sm tracking-wider rounded-full hover:bg-purple-dark active:bg-purple-dark transition-colors duration-200 shadow-sm shadow-purple/20 hover:shadow-md hover:shadow-purple/20"
+              className="mt-1 px-12 py-3.5 bg-purple text-white font-sans font-medium text-sm tracking-wider rounded-full hover:bg-purple-dark active:bg-purple-dark transition-colors duration-200 shadow-sm shadow-purple/20 hover:shadow-md hover:shadow-purple/25 relative overflow-hidden"
               whileTap={{ scale: 0.96 }}
             >
-              Unlock
+              <span className="relative z-10">Unlock</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
             </motion.button>
           </motion.div>
         ) : (
