@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import Counter from "./Counter";
+import { container, item } from "../utils/motion";
 
 const navItems = [
   {
@@ -24,24 +25,6 @@ const navItems = [
   },
 ];
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.5 },
-  },
-};
-
-const card = {
-  hidden: { opacity: 0, y: 20, scale: 0.95 },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
 function HomeScreen({ onNavigate }) {
   return (
     <motion.div
@@ -52,7 +35,18 @@ function HomeScreen({ onNavigate }) {
       transition={{ duration: 0.3 }}
     >
       {/* Background glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-lilac/8 rounded-full blur-[120px] pointer-events-none" />
+      <motion.div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-lilac/8 rounded-full blur-[120px] pointer-events-none"
+        animate={{
+          opacity: [0.5, 0.8, 0.5],
+          scale: [1, 1.05, 1],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
 
       <div className="w-full max-w-md flex flex-col items-center gap-8 relative z-10">
         {/* Logo + Title */}
@@ -87,25 +81,25 @@ function HomeScreen({ onNavigate }) {
           className="w-full grid grid-cols-2 gap-3 sm:gap-4"
           variants={container}
           initial="hidden"
-          animate="show"
+          animate="visible"
         >
-          {navItems.map((item) => (
+          {navItems.map((navItem) => (
             <motion.button
-              key={item.id}
-              onClick={() => onNavigate(item.id)}
-              variants={card}
-              className="group flex flex-col items-center gap-2.5 p-5 sm:p-6 bg-white/50 backdrop-blur-sm rounded-2xl border border-lilac-light/40 hover:bg-white/70 hover:border-lilac/60 hover:shadow-lg hover:shadow-lilac/10 transition-all duration-300 cursor-pointer"
+              key={navItem.id}
+              onClick={() => onNavigate(navItem.id)}
+              variants={item}
+              className="group flex flex-col items-center gap-2.5 p-5 sm:p-6 bg-white/50 backdrop-blur-sm rounded-2xl border border-lilac-light/40 hover:bg-white/70 hover:border-lilac/60 hover:shadow-lg hover:shadow-lilac/10 hover:-translate-y-0.5 transition-all duration-300 ease-out cursor-pointer"
               whileTap={{ scale: 0.97 }}
             >
               <span
                 className="text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-200"
                 role="img"
-                aria-label={item.label}
+                aria-label={navItem.label}
               >
-                {item.icon}
+                {navItem.icon}
               </span>
               <span className="font-sans text-xs sm:text-sm text-charcoal/80 font-medium text-center leading-snug">
-                {item.label}
+                {navItem.label}
               </span>
             </motion.button>
           ))}

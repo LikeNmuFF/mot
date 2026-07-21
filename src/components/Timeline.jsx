@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { timeline } from "../data/timeline";
 import TimelineCard from "./TimelineCard";
+import { ease, duration, fadeUp } from "../utils/motion";
 
 function Timeline({ onComplete }) {
   return (
@@ -14,9 +15,9 @@ function Timeline({ onComplete }) {
       <div className="max-w-md mx-auto">
         <motion.h2
           className="font-serif text-2xl sm:text-3xl text-charcoal text-center mb-10"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
         >
           Our Story
         </motion.h2>
