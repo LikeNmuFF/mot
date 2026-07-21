@@ -24,7 +24,7 @@ function Timeline({ onComplete }) {
 
         <div className="relative">
           {/* Vertical line */}
-          <div className="absolute left-6 sm:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-lilac to-transparent sm:-translate-x-1/2" />
+          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-lilac-light -translate-x-1/2" />
 
           <div className="flex flex-col gap-14">
             {timeline.map((item, i) => (
@@ -49,13 +49,10 @@ function Timeline({ onComplete }) {
         >
           <motion.button
             onClick={onComplete}
-            className="px-10 py-3 bg-purple text-white font-sans font-medium text-sm tracking-wide rounded-full hover:bg-purple-dark transition-colors flex items-center gap-2"
+            className="px-10 py-3 bg-purple text-white font-sans font-medium text-sm tracking-wide rounded-full hover:bg-purple-dark transition-colors"
             whileTap={{ scale: 0.96 }}
           >
             Continue
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
           </motion.button>
         </motion.div>
       </div>
