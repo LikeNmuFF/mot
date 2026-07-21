@@ -275,7 +275,7 @@ function FinaleScreen({ onComplete }) {
               transition={{ delay: 1.5, duration: 1 }}
             >
               <p
-                className="font-display text-xl sm:text-2xl text-purple/80 italic"
+                className="font-serif text-xl sm:text-2xl text-purple/80 italic"
                 style={{
                   textShadow: "0 0 20px rgba(124,92,191,0.3)",
                 }}
@@ -284,7 +284,7 @@ function FinaleScreen({ onComplete }) {
               </p>
               <div className="mt-6 flex items-center justify-center gap-3 text-rose/60">
                 <Heart className="w-4 h-4 fill-current" />
-                <span className="font-body text-sm tracking-widest uppercase">
+                <span className="font-sans text-sm tracking-widest uppercase">
                   With love, always
                 </span>
                 <Heart className="w-4 h-4 fill-current" />
