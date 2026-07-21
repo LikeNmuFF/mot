@@ -1,15 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { content } from "../data/content";
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  show: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.15, duration: 0.6, ease: "easeOut" },
-  }),
-};
+import { ease, duration, fadeUp, fadeIn } from "../utils/motion";
 
 function LoginScreen({ onUnlock }) {
   const [month, setMonth] = useState("");
@@ -56,7 +48,7 @@ function LoginScreen({ onUnlock }) {
 
     if (m === unlockMonth && d === unlockDay && y === unlockYear) {
       setUnlocking(true);
-      setTimeout(() => onUnlock(), 1000);
+      setTimeout(() => onUnlock(), 800); // Faster unlock
     } else {
       setShaking(true);
       setError(true);
@@ -74,7 +66,7 @@ function LoginScreen({ onUnlock }) {
   const inputClass = `w-[4.5rem] sm:w-24 h-14 sm:h-16 text-center text-xl sm:text-2xl font-serif
     bg-white/50 backdrop-blur-sm border-[1.5px] rounded-2xl
     focus:border-purple focus:bg-white/70 focus:ring-2 focus:ring-purple/10
-    focus:outline-none transition-all duration-300
+    focus:outline-none transition-all duration-300 ease-out
     placeholder:text-lilac/60 placeholder:text-lg
     ${error ? "border-rose animate-shake" : "border-lilac-light/60"}`;
 
@@ -106,9 +98,8 @@ function LoginScreen({ onUnlock }) {
             {/* Logo */}
             <motion.div
               variants={fadeUp}
-              custom={0}
               initial="hidden"
-              animate="show"
+              animate="visible"
               className="mb-2"
             >
               <img
@@ -121,9 +112,8 @@ function LoginScreen({ onUnlock }) {
             {/* Prompt */}
             <motion.p
               variants={fadeUp}
-              custom={1}
               initial="hidden"
-              animate="show"
+              animate="visible"
               className="font-serif text-lg sm:text-xl text-charcoal/80 text-center leading-relaxed max-w-[280px]"
             >
               When did it all start?
@@ -132,9 +122,8 @@ function LoginScreen({ onUnlock }) {
             {/* Date inputs */}
             <motion.div
               variants={fadeUp}
-              custom={2}
               initial="hidden"
-              animate="show"
+              animate="visible"
               className="flex gap-2.5 sm:gap-3 items-center"
             >
               <input
@@ -192,9 +181,8 @@ function LoginScreen({ onUnlock }) {
             {/* Submit button */}
             <motion.button
               variants={fadeUp}
-              custom={3}
               initial="hidden"
-              animate="show"
+              animate="visible"
               onClick={handleSubmit}
               className="mt-1 px-10 py-3 bg-purple text-white font-sans font-medium text-sm tracking-wider rounded-full hover:bg-purple-dark active:bg-purple-dark transition-colors duration-200 shadow-sm shadow-purple/20 hover:shadow-md hover:shadow-purple/20"
               whileTap={{ scale: 0.96 }}
