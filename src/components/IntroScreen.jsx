@@ -34,17 +34,19 @@ function IntroScreen({ onComplete }) {
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-lilac/10 rounded-full blur-[100px] pointer-events-none" />
 
       <motion.div
-        className="flex flex-col items-center gap-6 sm:gap-8 text-center relative z-10"
+        className="flex flex-col items-center gap-8 sm:gap-10 text-center relative z-10"
         variants={stagger}
         initial="hidden"
         animate="show"
       >
         {/* Logo */}
         <motion.div variants={fadeUp} className="mb-2">
-          <img
+          <motion.img
             src="/logo.png"
             alt="Xeia"
-            className="w-32 h-32 sm:w-40 sm:h-40 object-contain drop-shadow-md"
+            className="w-36 h-36 sm:w-44 sm:h-44 object-contain drop-shadow-lg"
+            animate={{ y: [-4, 4, -4] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           />
         </motion.div>
 
@@ -80,9 +82,17 @@ function IntroScreen({ onComplete }) {
         {/* CTA button */}
         <motion.button
           onClick={onComplete}
-          className="mt-4 px-10 py-3.5 bg-purple text-white font-sans font-medium text-sm tracking-wider rounded-full hover:bg-purple-dark active:bg-purple-dark transition-colors duration-200 shadow-sm shadow-purple/20 hover:shadow-md hover:shadow-purple/25"
+          className="mt-4 px-12 py-4 bg-purple text-white font-sans font-medium text-sm tracking-wider rounded-full hover:bg-purple-dark active:bg-purple-dark transition-colors duration-200 shadow-md shadow-purple/25 hover:shadow-lg hover:shadow-purple/30"
           variants={fadeUp}
           whileTap={{ scale: 0.96 }}
+          animate={{ 
+            boxShadow: [
+              "0 4px 14px 0 rgba(124, 92, 191, 0.25)",
+              "0 4px 20px 0 rgba(124, 92, 191, 0.4)",
+              "0 4px 14px 0 rgba(124, 92, 191, 0.25)"
+            ]
+          }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
           Tap to begin
         </motion.button>
