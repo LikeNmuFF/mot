@@ -34,9 +34,34 @@
   --text-label: 0.8125rem;
   --text-caption: 0.75rem;
   
+  /* Spacing scale */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
   --spacing-section: 4rem;
   --spacing-card: 1.5rem;
   --spacing-card-lg: 2rem;
+  
+  /* Border radius scale */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+  --radius-full: 9999px;
+  
+  /* Shadow system */
+  --shadow-sm: 0 1px 2px 0 rgba(45, 45, 45, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(45, 45, 45, 0.1), 0 2px 4px -2px rgba(45, 45, 45, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(45, 45, 45, 0.1), 0 4px 6px -4px rgba(45, 45, 45, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(45, 45, 45, 0.1), 0 8px 10px -6px rgba(45, 45, 45, 0.1);
+  --shadow-purple-sm: 0 4px 12px rgba(124, 92, 191, 0.15);
+  --shadow-purple-md: 0 8px 24px rgba(124, 92, 191, 0.2);
+  --shadow-purple-lg: 0 16px 32px rgba(124, 92, 191, 0.25);
 }
 
 * {
@@ -87,6 +112,24 @@ body {
   animation: shake 0.4s ease-in-out;
 }
 
+/* Float animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Soft pulse animation */
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Glow animation */
+@keyframes glow {
+  0% { box-shadow: 0 0 20px rgba(124, 92, 191, 0.3); }
+  100% { box-shadow: 0 0 30px rgba(124, 92, 191, 0.6); }
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 4px;
@@ -133,5 +176,100 @@ input:focus-visible {
   
   .card-padding {
     @apply p-5 sm:p-6;
+  }
+  
+  /* Card styling utilities */
+  .card-base {
+    @apply bg-white/60 backdrop-blur-md rounded-2xl border border-lilac-light/30;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300 ease-out hover:shadow-purple-md hover:scale-[1.02] hover:border-lilac-light/60;
+  }
+  
+  .card-interactive {
+    @apply cursor-pointer active:scale-[0.98];
+  }
+  
+  /* Button styling utilities */
+  .btn-primary {
+    @apply px-8 py-3.5 bg-purple text-white font-sans font-medium text-sm tracking-wider rounded-full 
+           hover:bg-purple-dark active:bg-purple-dark transition-colors duration-200 
+           shadow-sm shadow-purple/20 hover:shadow-md hover:shadow-purple/25 relative overflow-hidden;
+  }
+  
+  .btn-secondary {
+    @apply px-8 py-3.5 border-2 border-lilac text-charcoal font-sans font-medium text-sm tracking-wider rounded-full
+           hover:bg-lilac-light/30 transition-colors duration-200;
+  }
+  
+  .btn-icon {
+    @apply p-3 rounded-full bg-white/80 backdrop-blur-sm border border-lilac-light/30
+           hover:bg-white hover:border-lilac-light/60 transition-all duration-200;
+  }
+  
+  /* Text styling utilities */
+  .text-gradient-purple {
+    @apply bg-gradient-to-r from-purple to-lilac bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-rose {
+    @apply bg-gradient-to-r from-rose to-gold bg-clip-text text-transparent;
+  }
+  
+  /* Background utilities */
+  .bg-gradient-cream {
+    @apply bg-gradient-to-b from-cream via-cream to-lilac-light/20;
+  }
+  
+  .bg-gradient-purple {
+    @apply bg-gradient-to-br from-purple via-lilac-dark to-purple-dark;
+  }
+  
+  /* Glass effect */
+  .glass {
+    @apply bg-white/60 backdrop-blur-xl border border-white/40;
+  }
+  
+/* Animation utilities */
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-pulse-soft {
+    animation: pulse-soft 2s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  /* Adjust spacing for smaller screens */
+  .px-responsive {
+    @apply px-4;
+  }
+
+  .section-gap {
+    @apply gap-8;
+  }
+
+  /* Ensure buttons are tappable */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Fix text readability */
+  p, span, div {
+    font-size: inherit;
+    line-height: inherit;
   }
 }

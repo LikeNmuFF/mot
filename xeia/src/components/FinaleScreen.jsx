@@ -124,9 +124,9 @@ function FinaleScreen({ onComplete }) {
 
   const isText = content.finaleMediaType === "text";
 
-  return (
+    return (
     <motion.div
-      className="min-h-screen bg-cream flex flex-col items-center justify-center px-6 py-12 relative overflow-hidden"
+      className="min-h-screen bg-gradient-cream flex flex-col items-center justify-center px-responsive py-12 relative overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -220,44 +220,46 @@ function FinaleScreen({ onComplete }) {
               For you, Erica Joy
             </motion.p>
 
-            {/* Letter body */}
-            {isText ? (
-              <div className="flex flex-col gap-5">
-                {finaleParagraphs.map((para, i) => (
-                  <motion.p
-                    key={i}
-                    className="font-serif text-base sm:text-lg text-charcoal leading-relaxed text-center"
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ 
-                      delay: 0.7 + i * 0.3, 
-                      duration: duration.slow,
-                      ease: ease.smooth 
-                    }}
-                  >
-                    {para}
-                  </motion.p>
-                ))}
-              </div>
-            ) : (
-              <motion.div
-                className="w-full rounded-xl overflow-hidden shadow-lg"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7, duration: 0.6 }}
-              >
-                {content.finaleMediaType === "video" ? (
-                  <video
-                    src={content.finaleMediaSrc}
-                    controls
-                    className="w-full"
-                    playsInline
-                  />
-                ) : (
-                  <audio src={content.finaleMediaSrc} controls className="w-full" />
-                )}
-              </motion.div>
-            )}
+             {/* Letter body */}
+             {isText ? (
+               <div className="flex flex-col gap-5">
+                 {finaleParagraphs.map((para, i) => (
+                   <motion.p
+                     key={i}
+                     className="font-serif text-base sm:text-lg text-charcoal leading-relaxed text-center"
+                     initial={{ opacity: 0, y: 12, scale: 0.95 }}
+                     animate={{ opacity: 1, y: 0, scale: 1 }}
+                     transition={{ 
+                       delay: 0.7 + i * 0.2, 
+                       duration: duration.slow,
+                       ease: ease.smooth 
+                     }}
+                     whileHover={{ scale: 1.01 }}
+                   >
+                     {para}
+                   </motion.p>
+                 ))}
+               </div>
+             ) : (
+               <motion.div
+                 className="w-full rounded-xl overflow-hidden shadow-purple-md"
+                 initial={{ opacity: 0, y: 12, scale: 0.95 }}
+                 animate={{ opacity: 1, y: 0, scale: 1 }}
+                 transition={{ delay: 0.7, duration: 0.6, ease: ease.smooth }}
+                 whileHover={{ scale: 1.01 }}
+               >
+                 {content.finaleMediaType === "video" ? (
+                   <video
+                     src={content.finaleMediaSrc}
+                     controls
+                     className="w-full"
+                     playsInline
+                   />
+                 ) : (
+                   <audio src={content.finaleMediaSrc} controls className="w-full" />
+                 )}
+               </motion.div>
+             )}
 
             {/* Decorative bottom line */}
             <motion.div
@@ -267,41 +269,61 @@ function FinaleScreen({ onComplete }) {
               transition={{ delay: 2, duration: 0.6 }}
             />
 
-            {/* Signature with glow */}
-            <motion.div
-              className="mt-12 text-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.5, duration: 1 }}
-            >
-              <p
-                className="font-serif text-xl sm:text-2xl text-purple/80 italic"
-                style={{
-                  textShadow: "0 0 20px rgba(124,92,191,0.3)",
-                }}
-              >
-                "Every love story is beautiful, but ours is my favorite."
-              </p>
-              <div className="mt-6 flex items-center justify-center gap-3 text-rose/60">
-                <Heart className="w-4 h-4 fill-current" />
-                <span className="font-sans text-sm tracking-widest uppercase">
-                  With love, always
-                </span>
-                <Heart className="w-4 h-4 fill-current" />
-              </div>
-            </motion.div>
+             {/* Signature with glow */}
+             <motion.div
+               className="mt-12 text-center"
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ delay: 1.5, duration: 1, ease: ease.smooth }}
+             >
+               <motion.p
+                 className="font-serif text-xl sm:text-2xl text-purple/80 italic"
+                 style={{
+                   textShadow: "0 0 20px rgba(124,92,191,0.3)",
+                 }}
+                 whileHover={{ 
+                   textShadow: "0 0 30px rgba(124,92,191,0.5)",
+                   scale: 1.01
+                 }}
+                 transition={{ duration: 0.3 }}
+               >
+                 "Every love story is beautiful, but ours is my favorite."
+               </motion.p>
+               <motion.div 
+                 className="mt-6 flex items-center justify-center gap-3 text-rose/60"
+                 initial={{ opacity: 0 }}
+                 animate={{ opacity: 1 }}
+                 transition={{ delay: 1.8, duration: 0.5 }}
+               >
+                 <motion.div 
+                   whileHover={{ scale: 1.2, rotate: [0, -10, 10, 0] }}
+                   transition={{ duration: 0.3 }}
+                 >
+                   <Heart className="w-4 h-4 fill-current" />
+                 </motion.div>
+                 <span className="font-sans text-sm tracking-widest uppercase">
+                   With love, always
+                 </span>
+                 <motion.div 
+                   whileHover={{ scale: 1.2, rotate: [0, 10, -10, 0] }}
+                   transition={{ duration: 0.3 }}
+                 >
+                   <Heart className="w-4 h-4 fill-current" />
+                 </motion.div>
+               </motion.div>
+             </motion.div>
 
-            {/* Continue button */}
-            <motion.button
-              onClick={onComplete}
-              className="mt-4 px-10 py-3 bg-purple text-white font-sans font-medium text-sm tracking-wide rounded-full hover:bg-purple-dark transition-colors"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 2.6, duration: 0.5 }}
-              whileTap={{ scale: 0.96 }}
-            >
-              Continue to our home
-            </motion.button>
+             {/* Continue button */}
+             <motion.button
+               onClick={onComplete}
+               className="btn-primary mt-4"
+               initial={{ opacity: 0, y: 12 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ delay: 2.6, duration: 0.5 }}
+               whileTap={{ scale: 0.96 }}
+             >
+               Continue to our home
+             </motion.button>
           </motion.div>
         )}
       </AnimatePresence>

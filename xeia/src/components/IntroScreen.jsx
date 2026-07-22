@@ -21,16 +21,16 @@ const fadeUp = {
 };
 
 function IntroScreen({ onComplete }) {
-  return (
+    return (
     <motion.div
-      className="min-h-screen bg-cream flex flex-col items-center justify-center px-6"
+      className="min-h-screen bg-gradient-cream flex flex-col items-center justify-center px-responsive"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.4 }}
     >
       <motion.div
-        className="flex flex-col items-center gap-8 text-center"
+        className="flex flex-col items-center gap-8 text-center max-w-md"
         variants={stagger}
         initial="hidden"
         animate="show"
@@ -49,7 +49,7 @@ function IntroScreen({ onComplete }) {
           {content.introLine}
         </motion.p>
 
-        <motion.div variants={fadeUp}>
+        <motion.div variants={fadeUp} className="my-2">
           <Counter />
         </motion.div>
 
@@ -62,7 +62,7 @@ function IntroScreen({ onComplete }) {
 
         <motion.button
           onClick={onComplete}
-          className="mt-6 px-10 py-3 bg-purple text-white font-sans font-medium text-sm tracking-wide rounded-full hover:bg-purple-dark transition-colors"
+          className="btn-primary mt-6"
           variants={fadeUp}
           whileTap={{ scale: 0.96 }}
         >

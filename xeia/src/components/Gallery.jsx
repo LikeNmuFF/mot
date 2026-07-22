@@ -24,21 +24,21 @@ function Gallery({ onBack }) {
     }
   };
 
-  return (
+    return (
     <motion.div
-      className="min-h-screen bg-cream"
+      className="min-h-screen bg-gradient-cream"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.4 }}
     >
       {/* Header */}
       <div className="sticky top-0 z-10 bg-cream/90 backdrop-blur-sm border-b border-lilac-light/30">
         <div className="flex items-center px-4 py-4 max-w-4xl mx-auto">
-          <button
-            onClick={onBack}
-            className="flex items-center gap-2 text-warm-gray hover:text-charcoal transition-colors"
-          >
+           <button
+             onClick={onBack}
+             className="flex items-center gap-2 text-warm-gray hover:text-charcoal transition-colors font-sans text-sm"
+           >
             <svg
               className="w-5 h-5"
               fill="none"
@@ -129,7 +129,7 @@ function Gallery({ onBack }) {
             {/* Close button */}
             <button
               onClick={closeLightbox}
-              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="btn-icon absolute top-4 right-4 z-10 w-10 h-10 text-white hover:bg-white/20"
             >
               <svg
                 className="w-6 h-6"
@@ -148,10 +148,10 @@ function Gallery({ onBack }) {
 
             {/* Navigation - Previous */}
             {lightboxIndex > 0 && (
-              <button
-                onClick={() => navigateLightbox(-1)}
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-              >
+               <button
+                 onClick={() => navigateLightbox(-1)}
+                 className="btn-icon absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 text-white hover:bg-white/20"
+               >
                 <svg
                   className="w-8 h-8"
                   fill="none"
@@ -170,10 +170,10 @@ function Gallery({ onBack }) {
 
             {/* Navigation - Next */}
             {lightboxIndex < gallery.length - 1 && (
-              <button
-                onClick={() => navigateLightbox(1)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-              >
+               <button
+                 onClick={() => navigateLightbox(1)}
+                 className="btn-icon absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 text-white hover:bg-white/20"
+               >
                 <svg
                   className="w-8 h-8"
                   fill="none"

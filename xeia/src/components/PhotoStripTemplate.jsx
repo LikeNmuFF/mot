@@ -160,20 +160,20 @@ function PhotoStripTemplate({ photos, onRetake, onBack }) {
     link.click();
   };
 
-  return (
+    return (
     <motion.div
-      className="min-h-screen bg-cream flex flex-col"
+      className="min-h-screen bg-gradient-cream flex flex-col"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.4 }}
     >
       {/* Header */}
       <div className="flex items-center px-4 py-4 max-w-lg mx-auto w-full">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-warm-gray hover:text-charcoal transition-colors"
-        >
+           <button
+            onClick={onBack}
+            className="flex items-center gap-2 text-warm-gray hover:text-charcoal transition-colors font-sans text-sm"
+          >
           <svg
             className="w-5 h-5"
             fill="none"
@@ -215,7 +215,7 @@ function PhotoStripTemplate({ photos, onRetake, onBack }) {
         <div className="flex gap-4 max-w-lg mx-auto">
           <motion.button
             onClick={onRetake}
-            className="flex-1 py-3 px-6 border-2 border-lilac text-charcoal font-sans font-medium rounded-full hover:bg-lilac-light/30 transition-colors"
+            className="btn-secondary flex-1"
             whileTap={{ scale: 0.96 }}
           >
             Retake
@@ -223,7 +223,7 @@ function PhotoStripTemplate({ photos, onRetake, onBack }) {
           <motion.button
             onClick={handleDownload}
             disabled={!downloadUrl}
-            className="flex-1 py-3 px-6 bg-purple text-white font-sans font-medium rounded-full hover:bg-purple-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
             whileTap={{ scale: 0.96 }}
           >
             Save to your device

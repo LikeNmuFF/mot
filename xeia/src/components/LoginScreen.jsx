@@ -70,9 +70,9 @@ function LoginScreen({ onUnlock }) {
     placeholder:text-lilac/60 placeholder:text-lg
     ${error ? "border-rose animate-shake" : "border-lilac-light/60"}`;
 
-  return (
+    return (
     <motion.div
-      className="min-h-screen bg-gradient-to-b from-cream via-cream to-lilac-light/20 flex flex-col items-center justify-center px-6 relative overflow-hidden"
+      className="min-h-screen bg-gradient-cream flex flex-col items-center justify-center px-responsive relative overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -179,18 +179,18 @@ function LoginScreen({ onUnlock }) {
               </p>
             </motion.div>
 
-            {/* Submit button */}
-            <motion.button
-              variants={fadeUp}
-              initial="hidden"
-              animate="visible"
-              onClick={handleSubmit}
-              className="mt-1 px-12 py-3.5 bg-purple text-white font-sans font-medium text-sm tracking-wider rounded-full hover:bg-purple-dark active:bg-purple-dark transition-colors duration-200 shadow-sm shadow-purple/20 hover:shadow-md hover:shadow-purple/25 relative overflow-hidden"
-              whileTap={{ scale: 0.96 }}
-            >
-              <span className="relative z-10">Unlock</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
-            </motion.button>
+             {/* Submit button */}
+             <motion.button
+               variants={fadeUp}
+               initial="hidden"
+               animate="visible"
+               onClick={handleSubmit}
+               className="btn-primary mt-1"
+               whileTap={{ scale: 0.96 }}
+             >
+               <span className="relative z-10">Unlock</span>
+               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
+             </motion.button>
           </motion.div>
         ) : (
           <motion.div

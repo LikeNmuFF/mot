@@ -71,13 +71,13 @@ const navItems = [
 ];
 
 function HomeScreen({ onNavigate }) {
-  return (
+    return (
     <motion.div
-      className="min-h-screen bg-gradient-to-b from-cream via-cream to-lilac-light/15 flex flex-col items-center px-6 py-10 sm:py-14 relative overflow-hidden"
+      className="min-h-screen bg-gradient-cream flex flex-col items-center px-responsive py-10 sm:py-14 relative overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.4 }}
     >
       {/* Background glow */}
       <motion.div
@@ -144,26 +144,26 @@ function HomeScreen({ onNavigate }) {
           initial="hidden"
           animate="visible"
         >
-          {navItems.map((navItem) => (
-            <motion.button
-              key={navItem.id}
-              onClick={() => onNavigate(navItem.id)}
-              variants={item}
-              className="group flex flex-col items-center gap-2.5 p-5 sm:p-6 bg-white/60 backdrop-blur-xl rounded-2xl border border-white/40 shadow-[0_4px_24px_rgba(124,92,191,0.15)] hover:shadow-[0_8px_32px_rgba(124,92,191,0.25)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ease-out cursor-pointer"
-              whileTap={{ scale: 0.97 }}
-            >
-              <span
-                className="text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-200"
-                role="img"
-                aria-label={navItem.label}
-              >
-                {navItem.icon}
-              </span>
-              <span className="font-sans text-xs sm:text-sm text-charcoal/80 font-medium text-center leading-snug">
-                {navItem.label}
-              </span>
-            </motion.button>
-          ))}
+           {navItems.map((navItem) => (
+             <motion.button
+               key={navItem.id}
+               onClick={() => onNavigate(navItem.id)}
+               variants={item}
+               className="group flex flex-col items-center gap-2.5 card-padding card-base card-hover card-interactive"
+               whileTap={{ scale: 0.97 }}
+             >
+               <span
+                 className="text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-200"
+                 role="img"
+                 aria-label={navItem.label}
+               >
+                 {navItem.icon}
+               </span>
+               <span className="font-sans text-xs sm:text-sm text-charcoal/80 font-medium text-center leading-snug">
+                 {navItem.label}
+               </span>
+             </motion.button>
+           ))}
         </motion.div>
 
         {/* Footer tagline */}

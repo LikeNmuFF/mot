@@ -20,6 +20,13 @@ function Photobooth({ onBack }) {
   const startCamera = useCallback(async () => {
     try {
       setCameraError(null);
+      setCameraReady(false);
+      
+      // Check if mediaDevices is available
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error("Media devices API not available");
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: "user",
@@ -34,14 +41,32 @@ function Photobooth({ onBack }) {
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         videoRef.current.onloadedmetadata = () => {
-          videoRef.current.play();
+          videoRef.current.play().catch(e => {
+            console.error("Video play error:", e);
+          });
           setCameraReady(true);
+        };
+        
+        // Handle potential errors during video setup
+        videoRef.current.onerror = () => {
+          throw new Error("Video element error");
         };
       }
     } catch (err) {
       console.error("Camera error:", err);
+      
+      // Clean up any existing stream
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
+      }
+      
       if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
         setCameraError("Camera access needed for the photobooth! Please enable it in your browser settings.");
+      } else if (err.name === "NotFoundError") {
+        setCameraError("No camera found on this device.");
+      } else if (err.name === "NotReadableError") {
+        setCameraError("Camera is already in use by another application.");
       } else {
         setCameraError("Could not access camera. Please check your device settings.");
       }
@@ -53,6 +78,7 @@ function Photobooth({ onBack }) {
     return () => {
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
       }
     };
   }, [startCamera]);
@@ -104,12 +130,17 @@ function Photobooth({ onBack }) {
   const handleRetake = () => {
     setCapturedPhotos([]);
     setShowStrip(false);
+    // Restart camera if it was stopped
+    if (!cameraReady && !cameraError) {
+      startCamera();
+    }
   };
 
   const handleDownloadComplete = () => {
     // Clean up camera when done
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
     }
   };
 
@@ -124,13 +155,13 @@ function Photobooth({ onBack }) {
     );
   }
 
-  return (
+    return (
     <motion.div
       className="min-h-screen bg-charcoal relative"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.4 }}
     >
       {/* Hidden canvas for capture */}
       <canvas ref={canvasRef} className="hidden" />
@@ -138,10 +169,10 @@ function Photobooth({ onBack }) {
       {/* Header */}
       <div className="absolute top-0 left-0 right-0 z-20 bg-gradient-to-b from-black/50 to-transparent">
         <div className="flex items-center px-4 py-4 max-w-4xl mx-auto">
-          <button
-            onClick={onBack}
-            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors"
-          >
+           <button
+             onClick={onBack}
+             className="flex items-center gap-2 text-white/80 hover:text-white transition-colors font-sans text-sm"
+           >
             <svg
               className="w-5 h-5"
               fill="none"
@@ -163,43 +194,58 @@ function Photobooth({ onBack }) {
         </div>
       </div>
 
-      {/* Camera error */}
-      <AnimatePresence>
-        {cameraError && (
-          <motion.div
-            className="absolute inset-0 flex flex-col items-center justify-center px-8 z-30 bg-charcoal"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <div className="w-20 h-20 mb-6 rounded-full bg-lilac/20 flex items-center justify-center">
-              <svg
-                className="w-10 h-10 text-lilac"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
-                />
-              </svg>
-            </div>
-            <p className="text-white/80 font-sans text-center mb-6 max-w-sm leading-relaxed">
-              {cameraError}
-            </p>
-            <motion.button
-              onClick={startCamera}
-              className="px-6 py-3 bg-purple text-white font-sans font-medium rounded-full hover:bg-purple-dark transition-colors"
-              whileTap={{ scale: 0.96 }}
-            >
-              Try Again
-            </motion.button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+       {/* Camera loading and error states */}
+       <AnimatePresence>
+         {cameraError ? (
+           <motion.div
+             className="absolute inset-0 flex flex-col items-center justify-center px-8 z-30 bg-charcoal/95 backdrop-blur-sm"
+             initial={{ opacity: 0 }}
+             animate={{ opacity: 1 }}
+             exit={{ opacity: 0 }}
+           >
+             <div className="w-20 h-20 mb-6 rounded-full bg-lilac/20 flex items-center justify-center">
+               <svg
+                 className="w-10 h-10 text-lilac"
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24"
+               >
+                 <path
+                   strokeLinecap="round"
+                   strokeLinejoin="round"
+                   strokeWidth={1.5}
+                   d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
+                 />
+               </svg>
+             </div>
+             <p className="text-white/80 font-sans text-center mb-6 max-w-sm leading-relaxed">
+               {cameraError}
+             </p>
+             <motion.button
+               onClick={startCamera}
+               className="btn-primary"
+               whileTap={{ scale: 0.96 }}
+             >
+               Try Again
+             </motion.button>
+           </motion.div>
+         ) : !cameraReady && !cameraError ? (
+           <motion.div
+             className="absolute inset-0 flex flex-col items-center justify-center px-8 z-30 bg-charcoal/95 backdrop-blur-sm"
+             initial={{ opacity: 0 }}
+             animate={{ opacity: 1 }}
+             exit={{ opacity: 0 }}
+           >
+             <div className="w-16 h-16 mb-6 rounded-full border-4 border-lilac-light border-t-purple animate-spin" />
+             <p className="text-white/80 font-sans text-center mb-4 max-w-sm leading-relaxed">
+               Accessing camera...
+             </p>
+             <p className="text-white/60 font-sans text-xs text-center max-w-xs">
+               Please allow camera access when prompted
+             </p>
+           </motion.div>
+         ) : null}
+       </AnimatePresence>
 
       {/* Video feed */}
       <div className="relative w-full h-screen flex items-center justify-center bg-black">
@@ -260,20 +306,22 @@ function Photobooth({ onBack }) {
         )}
       </div>
 
-      {/* Capture button */}
-      <div className="absolute bottom-8 left-0 right-0 flex justify-center z-20">
-        <motion.button
-          className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={startCaptureSequence}
-          disabled={isCapturing || !cameraReady}
-        >
-          <div className="w-12 h-12 rounded-full border-4 border-purple flex items-center justify-center">
-            <div className="w-8 h-8 rounded-full bg-purple/20" />
-          </div>
-        </motion.button>
-      </div>
+       {/* Capture button */}
+       <div className="absolute bottom-8 left-0 right-0 flex justify-center z-20">
+         <motion.button
+           className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+           whileHover={{ scale: 1.05 }}
+           whileTap={{ scale: 0.95 }}
+           onClick={startCaptureSequence}
+           disabled={isCapturing || !cameraReady || !!cameraError}
+           animate={cameraReady && !isCapturing && !cameraError ? { boxShadow: ["0 0 0 0 rgba(124,92,191,0.4)", "0 0 0 8px rgba(124,92,191,0)"] } : {}}
+           transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
+         >
+           <div className="w-12 h-12 rounded-full border-4 border-purple flex items-center justify-center">
+             <div className="w-8 h-8 rounded-full bg-purple/20" />
+           </div>
+         </motion.button>
+       </div>
 
       {/* Photo strip preview */}
       <AnimatePresence>
